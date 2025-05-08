@@ -14,4 +14,8 @@
   
   {% if prediction %}
     <h2>Predicted Weekly Sales: ${{ prediction }}</h2>
+    <form method="post" style="margin-top: 20px;">
+        {% csrf_token %}
+        <button type="submit" name="download">Download Results as CSV</button>
+    </form>
   {% endif %}

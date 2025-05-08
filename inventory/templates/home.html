@@ -4,20 +4,37 @@
     {% csrf_token %}
     <input type="file" name="csv_file" accept=".csv" required><br><br>
     <button type="submit">Upload & Predict</button>
-  </form>
+</form>
 
 {% if predictions %}
-  <h2>Predictions:</h2>
-  <table border="1">
-    <tr>
-      <th>Input Row</th>
-      <th>Predicted Weekly Sales</th>
-    </tr>
-    {% for row, pred in predictions %}
-    <tr>
-      <td>{{ row }}</td>
-      <td>${{ pred }}</td>
-    </tr>
-    {% endfor %}
-  </table>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Store</th>
+                <th>Date</th>
+                <th>Predicted Weekly Sales</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in predictions %}
+                <tr>
+                    <td>{{ row.0 }}</td>
+                    <td>{{ row.1 }}</td>
+                    <td>${{ row.2 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endif %}
