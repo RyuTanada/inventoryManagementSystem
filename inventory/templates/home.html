@@ -1,0 +1,23 @@
+<h1>Upload CSV to Predict Weekly Sales</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="csv_file" accept=".csv" required><br><br>
+    <button type="submit">Upload & Predict</button>
+  </form>
+
+{% if predictions %}
+  <h2>Predictions:</h2>
+  <table border="1">
+    <tr>
+      <th>Input Row</th>
+      <th>Predicted Weekly Sales</th>
+    </tr>
+    {% for row, pred in predictions %}
+    <tr>
+      <td>{{ row }}</td>
+      <td>${{ pred }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endif %}

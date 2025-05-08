@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ART2021scut
+      MYSQL_DATABASE: inventory_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=mysql_db    # <<== FIXED!
+      - DATABASE_NAME=inventory_db
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=ART2021scut
+
+  mlserver:
+    build:
+      context: ./ml_server
+      dockerfile: Dockerfile
+    container_name: ml_server
+    restart: always
+    ports:
+      - "8001:8001"
+
+volumes:
+  db_data:

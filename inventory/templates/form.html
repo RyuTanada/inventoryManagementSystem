@@ -1,0 +1,17 @@
+<form method="post">
+    {% csrf_token %}
+    <label>Temperature: <input type="number" step="0.01" name="Temperature"></label><br>
+    <label>Fuel Price: <input type="number" step="0.01" name="Fuel_Price"></label><br>
+    <label>Unemployment: <input type="number" step="0.01" name="Unemployment"></label><br>
+    <label>Is Holiday:
+      <select name="IsHoliday">
+        <option value="0">No</option>
+        <option value="1">Yes</option>
+      </select>
+    </label><br>
+    <button type="submit">Predict Sales</button>
+  </form>
+  
+  {% if prediction %}
+    <h2>Predicted Weekly Sales: ${{ prediction }}</h2>
+  {% endif %}
