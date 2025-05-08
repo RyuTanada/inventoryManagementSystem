@@ -1,3 +1,4 @@
+{% load humanize %}
 <h1>Upload CSV to Predict Weekly Sales</h1>
 
 <form method="POST" enctype="multipart/form-data">
@@ -19,22 +20,26 @@
         }
     </style>
 
-    <table>
-        <thead>
+<table>
+    <thead>
+        <tr>
+            <th>Store</th>
+            <th>Date</th>
+            <th>Predicted Short-Term Sales</th>
+            <th>Predicted Seasonal Sales</th>
+            <th>Predicted Long-Term Sales</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in predictions %}
             <tr>
-                <th>Store</th>
-                <th>Date</th>
-                <th>Predicted Weekly Sales</th>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1|date:"Y-m-d" }}</td>
+                <td>${{ row.2|floatformat:2|intcomma }}</td>  <!-- Short-Term -->
+                <td>${{ row.3|floatformat:2|intcomma }}</td>  <!-- Seasonal -->
+                <td>${{ row.4|floatformat:2|intcomma }}</td>  <!-- Long-Term -->
             </tr>
-        </thead>
-        <tbody>
-            {% for row in predictions %}
-                <tr>
-                    <td>{{ row.0 }}</td>
-                    <td>{{ row.1 }}</td>
-                    <td>${{ row.2 }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
 {% endif %}
