@@ -1,0 +1,49 @@
+{% load humanize %}
+<a href="/">⬅ Back to Home</a>
+<h1>📈 Predict Sales</h1>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="csv_file" accept=".csv" required><br><br>
+    <button type="submit">Upload & Predict</button>
+</form>
+
+{% if error %}
+    <p style="color: red;">Error: {{ error }}</p>
+{% endif %}
+
+{% if predictions %}
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+
+<table>
+    <thead>
+        <tr>
+            <th>Store</th>
+            <th>Date</th>
+            <th>Predicted Short-Term Sales</th>
+            <th>Predicted Seasonal Sales</th>
+            <th>Predicted Long-Term Sales</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in predictions %}
+            <tr>
+                <td>{{ row.0 }}</td>
+                <td>{{ row.1|date:"Y-m-d" }}</td>
+                <td>${{ row.2|floatformat:2|intcomma }}</td>  <!-- Short-Term -->
+                <td>${{ row.3|floatformat:2|intcomma }}</td>  <!-- Seasonal -->
+                <td>${{ row.4|floatformat:2|intcomma }}</td>  <!-- Long-Term -->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}

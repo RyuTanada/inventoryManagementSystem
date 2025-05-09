@@ -12,7 +12,7 @@ features = ['IsHoliday', 'Temperature', 'Fuel_Price', 'Unemployment']
 target = 'Weekly_Sales'
 
 X_test = test_data[features]
-y_test = test_data[target]
+y_test = test_data[target].values.reshape(-1, 1)
 
 # Load Preprocessors
 poly = joblib.load('poly_transformer.pkl')
@@ -26,12 +26,14 @@ X_test_poly_scaled = scaler.transform(X_test_poly)
 lr_model = joblib.load('linear_regression.pkl')
 rf_model = joblib.load('random_forest.pkl')
 lstm_model = load_model('lstm_model.h5')
+lstm_y_scaler = joblib.load('lstm_y_scaler.pkl')
 
 # Predictions
 lr_preds = lr_model.predict(X_test_poly_scaled)
 rf_preds = rf_model.predict(X_test_poly)
 X_test_lstm = np.reshape(X_test_poly_scaled, (X_test_poly_scaled.shape[0], 1, X_test_poly_scaled.shape[1]))
-lstm_preds = lstm_model.predict(X_test_lstm).flatten()
+raw_lstm_preds = lstm_model.predict(X_test_lstm)
+lstm_preds = lstm_y_scaler.inverse_transform(raw_lstm_preds).flatten()
 
 # Adjust predictions
 dataset_mean = y_test.mean()

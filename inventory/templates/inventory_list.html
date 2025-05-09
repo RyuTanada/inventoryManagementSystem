@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Management</title>
+</head>
+<body>
+    <a href="/">⬅ Back to Home</a>
+    <h1>📦 Inventory List</h1>
+    <a href="{% url 'add_product' %}">➕ Add Product</a>
+    <br><br>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Name</th>
+            <th>SKU</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+        </tr>
+        {% for item in products %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.sku }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.stock_quantity }}</td>
+            <td>${{ item.price }}</td>
+            <td>{{ item.last_updated }}</td>
+            <td>
+                <a href="{% url 'edit_product' item.pk %}">✏️ Edit</a> |
+                <a href="{% url 'delete_product' item.pk %}" onclick="return confirm('Delete this item?')">🗑️ Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+</body>
+</html>
